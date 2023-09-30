@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Dosis:300,400,500");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -38,6 +39,10 @@
 .glow-4 {
   animation: glow4 4s linear infinite;
   animation-delay: 300ms;
+}
+
+.sun-svg {
+  fill: yellow;
 }
 
 @keyframes glow1 {
@@ -111,8 +116,6 @@
     transform: translate(10%, -10%) scale(1);
   }
 }
-
-@import url("https://fonts.googleapis.com/css?family=Dosis:300,400,500");
 
 @-moz-keyframes rocket-movement {
   100% {

@@ -1,11 +1,29 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
+import { BsMoonFill, BsSunFill } from "react-icons/bs";
+
 const API_URL = "https://api.unsplash.com/search/photos";
 const IMAGES_PER_PAGE = 20;
 import Card from "./components/Card/Card";
 // const API_KEY = "ji28ItvOyeZ86pQC1-WrT4eHq-VLrLQ3b4OdpDI_mS8";
 
+const themes = {
+  autumn: "light",
+  halloween: "dark",
+};
+
+const getThemeFromLocalStorage = () => {
+  return localStorage.getItem("theme" || themes.light);
+};
+
 function App() {
+  const [theme, setTheme] = useState(getThemeFromLocalStorage());
+  const handleTheme = () => {
+    const { autumn, halloween } = themes;
+    const newTheme = theme === halloween ? autumn : halloween;
+    document.documentElement.setAttribute("data-theme", theme);
+    setTheme(newTheme);
+  };
   const [images, setImages] = useState([]);
   const [totalPage, setTotalPages] = useState(0);
   const searchInput = useRef(null);
@@ -37,24 +55,34 @@ function App() {
   useEffect(() => {
     document.body.className = bodyClassName;
   }, [bodyClassName]);
-  console.log(images);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
   return (
     <div className="container w-full mx-auto flex flex-col items-center justify-center pt-4">
-      <div class="brand-logo">
-        <img src="http://salehriaz.com/404Page/img/logo.svg" width="80px" />
+      <div className="px-24 pt-6 flex justify-between items-center w-full">
+        <div class="brand-logo">
+          <img src="http://salehriaz.com/404Page/img/logo.svg" width="80px" />
+        </div>
+        <label className="swap swap-rotate">
+          <input type="checkbox" onClick={handleTheme} />
+          <BsSunFill className="swap-on h-8 w-8 sun-svg" />
+          <BsMoonFill className="swap-off h-8 w-8" />
+        </label>
       </div>
-
       <div className="relative p-12 w-full sm:max-w-2xl sm:mx-auto">
         <div className="overflow-hidden z-0 rounded-full relative p-3">
           <form
             role="form"
-            className="relative flex z-50 bg-white rounded-full search-input"
+            className="relative flex z-50 rounded-full search-input"
             onSubmit={handleSearch}
           >
             <input
               type="text"
               placeholder="enter your search here"
-              className="rounded-full flex-1 px-6 py-4 text-gray-700 focus:outline-none"
+              className="rounded-full flex-1 px-6 py-4 focus:outline-none"
               ref={searchInput}
             />
             <button className="bg-indigo-500 text-white rounded-full font-semibold px-8 py-4 hover:bg-indigo-400 focus:bg-indigo-600 focus:outline-none">
